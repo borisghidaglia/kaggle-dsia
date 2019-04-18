@@ -31,6 +31,9 @@ Link to the competition : [Indebtedness Case Orientation](https://www.kaggle.com
 
 Methods | Score | Date
 ------------ | ------------- | -------------
+Xgboost | 0.60663 | 8/04
+Random Forest and meta groups | 0.60018 | 9/04
+MultiOutput Random Forest stacked with a logistic regression | 0.59511 | 15/04
 Random Forest + Grid Search (submission_3) | 0.59327 | 27/03
 Random Forest (submission_2) | 0.56932 | 26/03
 
@@ -317,20 +320,6 @@ Even though the titles aren't correct in the notebook, we are actually using
 Xgboost for this submission. It is a pretty *naive* submission, as we only
 did a little grid search.
 
-### Submission 9 : MultiOutput Random Forest stacked with a logistic regression
-
-Cleaning :  
-- removing 'STRUCTURE PRESCRIPTRICE', 'year', 'month' columns  
-- filling NaNs that should be 0 by 0
-
-Engineering :
-- filling age NaNs with regression + cleaning tranche_age column
-
-The idea here was to generate the probabilities that the multioutput random
-forest classifier can output, and then on top of them, train another classifier:
-a logistic regression. I was in a rush so I didn't cross validate (it wasn't
-trivial to implement) : it was a bit risky, but I didn't seemed to overfit.
-
 ### Submission 8 : Random Forest and meta groups
 
 Cleaning :  
@@ -344,3 +333,18 @@ With this idea, we tried to merge the possible outputs into groups. We decided
 to build a group with Surendettement and Accompagnement, and another one with
 the other possible output. Then, On each of the two dataframe we created (in
 the Surendettement and Accompagnement or not), we applied a random forest.
+
+
+### Submission 9 : MultiOutput Random Forest stacked with a logistic regression
+
+Cleaning :  
+- removing 'STRUCTURE PRESCRIPTRICE', 'year', 'month' columns  
+- filling NaNs that should be 0 by 0
+
+Engineering :
+- filling age NaNs with regression + cleaning tranche_age column
+
+The idea here was to generate the probabilities that the multioutput random
+forest classifier can output, and then on top of them, train another classifier:
+a logistic regression. I was in a rush so I didn't cross validate (it wasn't
+trivial to implement) : it was a bit risky, but I didn't seemed to overfit.
