@@ -25,7 +25,10 @@ Link to the competition : [Indebtedness Case Orientation](https://www.kaggle.com
     - [Orientation](#orientation)  
     - [Nature Diff](#nature-diff)  
     - [Age and age category](#age-and-age-category)  
-
+3. [Methods](#methods)  
+  3.1 [Submission 5 : Xgboost](#submission-5-xgboost)  
+  3.2 [Submission 8 : Random Forest and meta groups](#submission-8-random-forest-and-meta-groups)  
+  3.3 [Submission 9 : MultiOutput Random Forest stacked with a logistic regression](#submission-9-multioutput-random-forest-stacked-with-a-logistic-regression)  
 
 ## Results
 
