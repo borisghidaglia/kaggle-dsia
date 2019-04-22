@@ -17,14 +17,8 @@ Link to the competition : [Indebtedness Case Orientation](https://www.kaggle.com
 1. [Results](#results)  
 2. [Data Exploration, Cleaning and Engineering](#data-exploration-cleaning-and-engineering)  
   2.1 [Data Exploration](#data-exploration)  
-    - [NaNs overview](#nans-overview)    
-    - [Prescriptive Structure](#prescriptive-structure)  
-    - [Platform](#platform)  
-    - [Year and month](#year-and-month)  
-    - [Region](#region)  
-    - [Orientation](#orientation)  
-    - [Nature Diff](#nature-diff)  
-    - [Age and age category](#age-and-age-category)  
+  2.2 [Data Cleaning](#data-cleaning)  
+  2.2 [Data Engineering](#data-engineering)
 3. [Methods](#methods)  
   3.1 [Submission 5 : Xgboost](#submission-5--xgboost)  
   3.2 [Submission 8 : Random Forest and meta groups](#submission-8--random-forest-and-meta-groups)  
@@ -303,6 +297,61 @@ We'll use those informations to estimate the real value of the NaNs. With this
 technique, we'll be able to fill the column with more correct values than if we
 have done it with the global average age only.
 
+
+## Data Cleaning
+
+The data cleaning part was, for the main part, removing columns that I detected
+as *dangerous* and filling NaNs that should have been 0.
+
+**Why do I consider that some columns are dangerous ?**   
+Take the *STRUCTURE PRESCRIPTRICE* column as an example. Of course, a given structure
+could, for one reason or another, be more likely to orientate a case towards a certain
+classification. Thus, one might think this column could improve our score, and
+one would be right ! **BUT**, what if *CRESUS* modify their structure order, so
+that *STRUCTURE PRESCRIPTRICE 1* is now *STRUCTURE PRESCRIPTRICE 10* ? Well, if
+our algorithm had detected that the *10* was very likely to lead to refused cases,
+then, now that the *1st* structure became the *10th*, the cases from the old
+*1st* structure will be more likely to be classified as refused. And we want to
+avoid that because in reality, there is no reason to modify our classification
+here. Another thing that could happen : the STRUCTURE PRESCRIPTRICE change its
+location and CRESUS doesn't know it. Thus, this structure will send completely
+different cases to CRESUS, but what the algorithm learned about it will not
+change.    
+
+## Data Engineering
+
+### Age  
+
+The biggest data engineering work I did was to predict the **age** column given
+other ones. I did it with a linear regression. Indeed, at first I filled the
+40% of age NaNs with the mean age, but after the data exploration I did above,
+I realized I could certainly do better. Here is how.  
+
+I used the columns : 'situation', 'PROF', 'pers_a_charge' and 'REVENUS'. Then,
+I created 2 columns : pers_a_charge squared and cubed (I noticed it improved
+the regression).  
+
+The results were :
+
+| Metric | Linear regression | Mean | Median |
+| :----: | :---------------: | :--: | :----: |
+| Mean absolute error | 6.44 | 11.50 | 11.50 |
+| Mean squared error | 66.14 | 187.53 | 187.53 |
+
+It is definitely better than with mean or median.  
+
+Then, I filled the tranche_age column with correct values (some categories were
+wrong).
+
+### Dummyfing
+
+Depending on the method I wanted to use, sometimes I needed to dummify my columns.
+
+**Why ?**  
+Because even though trees aren't "order" sensitive, regressions and many other
+methods are. If you turn your categorical columns into numerical ones (ex :
+*Potaoe* and *Bottle* turned into *1* and *2*), you are implying an order (but
+why does *Potaoe* equals two *Bottle* ? It doesn't make sense here).
 
 ## Methods
 From the highest to the lowest score, the methods from the notebooks I decided
