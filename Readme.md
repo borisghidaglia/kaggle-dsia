@@ -1,3 +1,5 @@
+## Warning : This repo has been used to save my progress in a course I followed during my 4th year, but it has not been cleaned yet. Thus, files might not contain what their names might make you think they contain and there are some code repetition amongst the notebooks.
+
 # Indebtedness Case Orientation
 
 [CRESUS association](https://www.cresus-iledefrance.org/) advise people that are
